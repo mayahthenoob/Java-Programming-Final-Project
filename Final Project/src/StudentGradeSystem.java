@@ -1,3 +1,4 @@
+//imports
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
@@ -5,6 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
+//declarations
 public class StudentGradeSystem extends JFrame {
     private JTextField txtStudentName, txtSubjectName, txtScore, txtSearch;
     private DefaultTableModel tableModel;
@@ -13,10 +15,11 @@ public class StudentGradeSystem extends JFrame {
     private DefaultListModel<String> subjectListModel;
     private JList<String> subjectList;
 
-    // FIX: store subject + score properly
+    //store subject + score
     private ArrayList<Object[]> pendingScores = new ArrayList<>();
 
-    private Color BG_DARK = new Color(30, 34, 42);
+    //colours
+    private Color BG_DARK = new Color(30, 34, 42); //mainly for the bg of the running tool
     private Color BG_PANEL = new Color(40, 44, 55);
     private Color BG_INPUT = new Color(52, 57, 70);
     private Color ACCENT = new Color(72, 152, 241);
@@ -24,8 +27,8 @@ public class StudentGradeSystem extends JFrame {
     private Color TEXT_SECONDARY = new Color(160, 165, 180);
     private Color GREEN = new Color(80, 200, 120);
     private Color RED = new Color(240, 90, 90);
-    private Color BORDER_COLOR = new Color(60, 65, 80);
 
+    //the run tool window
     public StudentGradeSystem() {
         setTitle("Student Grading System");
         setSize(1100, 680);
@@ -34,7 +37,7 @@ public class StudentGradeSystem extends JFrame {
         getContentPane().setBackground(BG_DARK);
         setLayout(new BorderLayout());
 
-        add(buildHeader(), BorderLayout.NORTH); // FIXED
+        add(buildHeader(), BorderLayout.NORTH);
         add(buildMainContent(), BorderLayout.CENTER);
         add(buildFooter(), BorderLayout.SOUTH);
     }
@@ -47,7 +50,8 @@ public class StudentGradeSystem extends JFrame {
         JPanel left = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         left.setBackground(BG_PANEL);
 
-        JLabel title = new JLabel("🎓 Student Grading System");
+        //title on the form
+        JLabel title = new JLabel("Student Grading System");
         title.setFont(new Font("Segoe UI", Font.BOLD, 22));
         title.setForeground(TEXT_PRIMARY);
         left.add(title);
@@ -55,6 +59,7 @@ public class StudentGradeSystem extends JFrame {
         JPanel right = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         right.setBackground(BG_PANEL);
 
+        //search bar placeholder text
         txtSearch = new PlaceholderTextField(22);
         ((PlaceholderTextField) txtSearch).setPlaceholder("Search student name...");
         styleTextField(txtSearch);
@@ -115,6 +120,10 @@ public class StudentGradeSystem extends JFrame {
         lblStudentAvg = new JLabel("Average: —");
         lblStudentGrade = new JLabel("Grade: —");
         lblStudentStatus = new JLabel("Status: —");
+
+        lblStudentAvg.setForeground(TEXT_SECONDARY);
+        lblStudentGrade.setForeground(ACCENT);
+        lblStudentStatus.setForeground(TEXT_PRIMARY);
 
         panel.add(lblStudentAvg);
         panel.add(lblStudentGrade);
@@ -233,13 +242,16 @@ public class StudentGradeSystem extends JFrame {
             total += (double) tableModel.getValueAt(i, 2);
         }
 
+        //average calculation
         double avg = total / tableModel.getRowCount();
         lblOverallStats.setText("Overall Avg: " + avg);
     }
 
+    //check what's in the input box and reads it lowercase, or capitalised
     private void searchStudent() {
         String target = txtSearch.getText().toLowerCase();
 
+        //clear the area with all results
         dataTable.clearSelection();
         for (int i = 0; i < dataTable.getRowCount(); i++) {
             String name = tableModel.getValueAt(i, 0).toString().toLowerCase();
@@ -249,15 +261,18 @@ public class StudentGradeSystem extends JFrame {
         }
     }
 
+    //deletion of selected items
     private void deleteSelected() {
         int row = dataTable.getSelectedRow();
         if (row != -1) tableModel.removeRow(row);
     }
 
+    //clear all function
     private void clearAll() {
         tableModel.setRowCount(0);
     }
 
+    //grading criteria
     private String calculateGrade(double s) {
         if (s >= 90) return "A";
         if (s >= 80) return "B";
@@ -310,6 +325,7 @@ public class StudentGradeSystem extends JFrame {
             this.placeholder = text;
         }
 
+        //message for no data in the input box
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             if (getText().isEmpty() && placeholder != null) {
@@ -319,6 +335,7 @@ public class StudentGradeSystem extends JFrame {
         }
     }
 
+    //the running function
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new StudentGradeSystem().setVisible(true));
     }
